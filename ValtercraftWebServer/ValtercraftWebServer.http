@@ -1,0 +1,6 @@
+@ValtercraftWebServer_HostAddress = http://localhost:5191
+
+GET {{ValtercraftWebServer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
