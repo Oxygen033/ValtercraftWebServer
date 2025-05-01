@@ -16,6 +16,7 @@ namespace ValtercraftWebServer.Models
         public string Username { get; set; }
 
         [Required]
+        [NotMapped]
         public string Password { get; set; }
 
         [Required]
