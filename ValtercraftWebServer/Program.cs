@@ -15,7 +15,9 @@ namespace ValtercraftWebServer
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Configuration.AddUserSecrets<Program>();
-            
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
             // Add services to the container.
 
             builder.Services.AddControllers();

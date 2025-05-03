@@ -17,6 +17,13 @@ namespace ValtercraftWebServer.Services
 
         public async Task<WhiteListRequestDto?> CreateWhiteListRequest(int userId, CreateWhiteListRequestDto dto)
         {
+            List<WhiteListRequestDto> existingRequests = await GetAllWhiteListRequests(userId);
+            foreach (WhiteListRequestDto request in existingRequests)
+            {
+                if (request.Status == WhiteListRequestStatus.PENDING.ToString())
+                    return null;
+            }
+
             WhiteListRequest whiteListRequest = new WhiteListRequest()
             {
                 Nickname = dto.Nickname,
@@ -33,7 +40,7 @@ namespace ValtercraftWebServer.Services
                 Id = whiteListRequest.Id,
                 Nickname = whiteListRequest.Nickname,
                 Reason = whiteListRequest.Reason,
-                Status = whiteListRequest.Status.ToString(),
+                Status = WhiteListRequestStatus.PENDING.ToString(),
                 User = new UserDto
                 {
                     Id = whiteListRequest.User.Id,
@@ -66,5 +73,48 @@ namespace ValtercraftWebServer.Services
             };
         }
 
+        public async Task<List<WhiteListRequestDto>> GetAllWhiteListRequests(int? userId)
+        {
+            return await _context.WhiteListRequests
+                .Include(req => req.User)
+                .Select(req => new WhiteListRequestDto
+                {
+                    Id = req.Id,
+                    Nickname = req.Nickname,
+                    Reason = req.Reason,
+                    Status = req.Status.ToString(),
+                    User = new UserDto
+                    {
+                        Id = req.User.Id,
+                        Username = req.User.Username,
+                        Role = req.User.Role.ToString()
+                    }
+                }).Where(req => userId == null || req.User.Id == userId).ToListAsync();
+        }
+
+
+        public async Task<bool> SetRequestStatus(int requestId, int status) //0 - pending 1 - accepted 2 - declined
+        {
+            var request = await _context.WhiteListRequests
+                .FirstOrDefaultAsync(r => r.Id == requestId);
+            if (request == null)
+                return false;
+            request.Status = (WhiteListRequestStatus)status;
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> DeleteWhiteListRequest(int id)
+        {
+            WhiteListRequest? request = await _context.WhiteListRequests.FindAsync(id);
+            if (request == null)
+                return false;
+
+            _context.WhiteListRequests.Remove(request);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }
