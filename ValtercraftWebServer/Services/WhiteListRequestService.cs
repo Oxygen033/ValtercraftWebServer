@@ -20,7 +20,7 @@ namespace ValtercraftWebServer.Services
             List<WhiteListRequestDto> existingRequests = await GetAllWhiteListRequests(userId);
             foreach (WhiteListRequestDto request in existingRequests)
             {
-                if (request.Status == WhiteListRequestStatus.PENDING.ToString())
+                if (request.Status == WhiteListRequestStatus.PENDING.ToString() || request.Status == WhiteListRequestStatus.APPROVED.ToString())
                     return null;
             }
 
