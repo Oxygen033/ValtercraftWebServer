@@ -53,7 +53,8 @@ namespace ValtercraftWebServer.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             if (userId != id)
                 return Forbid();
 

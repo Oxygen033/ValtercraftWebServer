@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ValtercraftWebServer.Models
 {
@@ -16,10 +17,11 @@ namespace ValtercraftWebServer.Models
         public string Username { get; set; }
 
         [Required]
+        [JsonIgnore]
         public string Password { get; set; }
 
         [Required]
-        public UserRole Role { get; set; }
+        public UserRole Role { get; set; } = UserRole.USER;
 
         [Required]
         public ICollection<WhiteListRequest> WhiteListRequests { get; set; }

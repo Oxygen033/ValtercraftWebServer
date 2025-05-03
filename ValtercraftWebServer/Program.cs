@@ -43,6 +43,7 @@ namespace ValtercraftWebServer
             builder.Services.AddAuthorization();
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddScoped<UsersService>();
+            builder.Services.AddScoped<WhiteListRequestService>();
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
             builder.Services.AddCors(options =>

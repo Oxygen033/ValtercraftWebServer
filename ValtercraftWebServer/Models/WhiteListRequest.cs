@@ -17,9 +17,19 @@ namespace ValtercraftWebServer.Models
         public string Reason { get; set; }
 
         [Required]
+        public WhiteListRequestStatus Status { get; set; } = WhiteListRequestStatus.PENDING;
+
+        [Required]
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]
         public User User { get; set; }
+    }
+
+    public enum WhiteListRequestStatus
+    {
+        PENDING,
+        APPROVED,
+        REJECTED
     }
 }
