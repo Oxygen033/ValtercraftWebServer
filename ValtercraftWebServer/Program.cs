@@ -28,6 +28,9 @@ namespace ValtercraftWebServer
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var jwtConfig = builder.Configuration.GetSection("Jwt");
+            builder.Services.Configure<RconSettings>(
+                builder.Configuration.GetSection("Rcon"));
+
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
@@ -46,6 +49,7 @@ namespace ValtercraftWebServer
             builder.Services.AddScoped<AuthService>();
             builder.Services.AddScoped<UsersService>();
             builder.Services.AddScoped<WhiteListRequestService>();
+            builder.Services.AddScoped<RconService>();
             builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
             builder.Services.AddCors(options =>
