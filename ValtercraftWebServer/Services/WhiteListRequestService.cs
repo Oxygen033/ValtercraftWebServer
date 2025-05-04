@@ -9,10 +9,12 @@ namespace ValtercraftWebServer.Services
     public class WhiteListRequestService
     {
         private readonly ApplicationDbContext _context;
+        private readonly RconService _rconService;
 
-        public WhiteListRequestService(ApplicationDbContext context)
+        public WhiteListRequestService(ApplicationDbContext context, RconService rconService)
         {
             _context = context;
+            _rconService = rconService;
         }
 
         public async Task<WhiteListRequestDto?> CreateWhiteListRequest(int userId, CreateWhiteListRequestDto dto)
@@ -101,6 +103,9 @@ namespace ValtercraftWebServer.Services
                 return false;
             request.Status = (WhiteListRequestStatus)status;
             await _context.SaveChangesAsync();
+
+            if (status == 1)
+                await _rconService.AddToWhiteList(request.Nickname);
 
             return true;
         }

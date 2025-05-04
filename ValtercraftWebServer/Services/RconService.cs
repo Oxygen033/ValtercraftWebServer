@@ -26,8 +26,10 @@ namespace ValtercraftWebServer.Services
         public async Task<int?> GetOnline()
         {
             string response = SendCommand("list");
+
             if (response == null)
                 return null;
+
             Match match = Regex.Match(response, @"\d+");
             if (match.Success)
             {
@@ -37,6 +39,26 @@ namespace ValtercraftWebServer.Services
             {
                 return null;
             }
+        }
+
+        public async Task<bool> AddToWhiteList(string username)
+        {
+            string response = SendCommand($"whitelist add {username}");
+
+            if (!response.Contains("Added"))
+                return false;
+
+            return true;
+        }
+
+        public async Task<bool> RemoveFromWhiteList(string username)
+        {
+            string response = SendCommand($"whitelist remove {username}");
+
+            if (!response.Contains("Removed"))
+                return false;
+
+            return true;
         }
     }
 }
