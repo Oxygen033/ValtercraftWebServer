@@ -36,7 +36,7 @@ namespace ValtercraftWebServer.Controllers
         [HttpPatch("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto updateUserDto)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = int.Parse(User.FindFirst("id")?.Value);
             if (userId != id)
                 return Forbid();
 
@@ -54,7 +54,7 @@ namespace ValtercraftWebServer.Controllers
         public async Task<IActionResult> DeleteUser(int id)
         {
             
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            int userId = int.Parse(User.FindFirst("id")?.Value);
             if (userId != id)
                 return Forbid();
 

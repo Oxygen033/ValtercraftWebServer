@@ -35,6 +35,8 @@ namespace ValtercraftWebServer
             {
                 options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
+                    NameClaimType = "username",
+                    RoleClaimType = "role",
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
@@ -56,7 +58,7 @@ namespace ValtercraftWebServer
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("https://localhost:7076")
+                    policy.WithOrigins("http://localhost:5173")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials()
@@ -74,11 +76,10 @@ namespace ValtercraftWebServer
             }
 
             //app.UseHttpsRedirection();
+            app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseCors();
 
             app.MapControllers();
 

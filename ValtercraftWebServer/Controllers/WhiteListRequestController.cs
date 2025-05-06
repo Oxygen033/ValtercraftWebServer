@@ -25,7 +25,7 @@ namespace ValtercraftWebServer.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateWhiteListRequest([FromBody] CreateWhiteListRequestDto createWhiteListRequestDto)
         {
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            int userId = int.Parse(User.FindFirst("id")?.Value);
             WhiteListRequestDto? request = await _whiteListRequestService.CreateWhiteListRequest(userId, createWhiteListRequestDto);
             if (request == null)
                 return BadRequest();
